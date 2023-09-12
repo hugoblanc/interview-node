@@ -1,5 +1,4 @@
-import { UserAccount } from "../Account.Domain/UserAccount";
-import { expect } from "jest";
+import { UserAccount } from "../domain/usera-account";
 
 describe("UserAccount", () => {
   let userAccount: UserAccount;

@@ -1,12 +1,10 @@
-import { uuid } from "crypto";
-
-class UserAccount {
-  private id: string;
-  private email: string;
-  private password: string;
+export class UserAccount {
+  id: string;
+  email: string;
+  password: string;
 
   constructor(email: string, password: string) {
-    this.id = uuidv4();
+    this.id = "123";
     this.email = email;
     this.password = password;
   }

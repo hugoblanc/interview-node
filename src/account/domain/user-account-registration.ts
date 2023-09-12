@@ -1,5 +1,5 @@
-import { IUserAccountRepository } from "./IUserAccountRepository";
-import { UserAccount } from "./UserAccount";
+import { IUserAccountRepository } from "./i-user-account-repository";
+import { UserAccount } from "./usera-account";
 
 export class UserAccountRegistration {
   private userAccountRepository: IUserAccountRepository;

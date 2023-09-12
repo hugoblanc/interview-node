@@ -1,12 +1,14 @@
-import { UserAccountRegistration } from "../Account.Domain/UserAccountRegistration";
-import { IUserAccountRepository } from "../Account.Domain/IUserAccountRepository";
+import { IUserAccountRepository } from "../domain/i-user-account-repository";
+import { UserAccountRegistration } from "../domain/user-account-registration";
+import { mock } from "jest-mock-extended";
+import { UserAccount } from "../domain/usera-account";
 
 describe("UserAccountRegistration", () => {
   let userAccountRegistration: UserAccountRegistration;
   let mockUserAccountRepository: IUserAccountRepository;
 
   beforeEach(() => {
-    mockUserAccountRepository = jest.fn<IUserAccountRepository>();
+    mockUserAccountRepository = mock<IUserAccountRepository>();
     userAccountRegistration = new UserAccountRegistration(
       mockUserAccountRepository
     );
@@ -21,12 +23,17 @@ describe("UserAccountRegistration", () => {
     expect(mockUserAccountRepository.save).toHaveBeenCalledWith({
       email,
       password,
+      id: expect.any(String),
     });
   });
 
   it("should change a user account password", async () => {
     const userId = "123";
     const newPassword = "newPassword123";
+
+    jest
+      .spyOn(mockUserAccountRepository, "get")
+      .mockResolvedValue(new UserAccount("123", "password123"));
 
     await userAccountRegistration.changePassword(userId, newPassword);
 
