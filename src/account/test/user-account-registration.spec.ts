@@ -1,7 +1,7 @@
-import { IUserAccountRepository } from "../domain/i-user-account-repository";
-import { UserAccountRegistration } from "../domain/user-account-registration";
 import { MockProxy, mock } from "jest-mock-extended";
+import { IUserAccountRepository } from "../domain/i-user-account-repository";
 import { UserAccount } from "../domain/user-account";
+import { UserAccountRegistration } from "../domain/user-account-registration";
 
 describe("UserAccountRegistration", () => {
   let userAccountRegistration: UserAccountRegistration;
@@ -16,21 +16,23 @@ describe("UserAccountRegistration", () => {
 
   it("should register a user account", async () => {
     const email = "test@example.com";
-    const password = "password123";
+    const password = "pasword123";
 
     await userAccountRegistration.register(email, password);
 
-    expect(mockUserAccountRepository.save).toHaveBeenCalledWith({
-      email,
-      password,
-      id: expect.any(String),
-    });
+    expect(mockUserAccountRepository.save).toHaveBeenCalledWith(
+      expect.objectContaining({
+        email,
+        password,
+        id: expect.any(String),
+      })
+    );
   });
 
   it("should change a user account password", async () => {
-    const newPassword = "newPassword123";
+    const newPassword = "newPasword123";
     const email = "test@gmail.com";
-    const mockUserAccount = new UserAccount(email, "password123");
+    const mockUserAccount = new UserAccount(email, "pasword123");
     mockUserAccountRepository.get.mockResolvedValue(mockUserAccount);
 
     await userAccountRegistration.changePassword(
@@ -41,10 +43,12 @@ describe("UserAccountRegistration", () => {
     expect(mockUserAccountRepository.get).toHaveBeenCalledWith(
       mockUserAccount.id
     );
-    expect(mockUserAccountRepository.save).toHaveBeenCalledWith({
-      email,
-      password: newPassword,
-      id: mockUserAccount.id,
-    });
+    expect(mockUserAccountRepository.save).toHaveBeenCalledWith(
+      expect.objectContaining({
+        email,
+        password: newPassword,
+        id: mockUserAccount.id,
+      })
+    );
   });
 });

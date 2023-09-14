@@ -1,15 +1,37 @@
 import { UserAccount } from "../domain/user-account";
 
 describe("UserAccount", () => {
-  let userAccount: UserAccount;
+  describe.each(["@Azerty123", "$JohnDoe0"])(
+    "UserAccount with password '%s' should be valid",
+    (password) => {
+      test("register", () => {
+        const userAccount = new UserAccount("sample@mail.com", password);
+        expect(userAccount.password).toBe(password);
+      });
 
-  beforeEach(() => {
-    userAccount = new UserAccount("test@example.com", "oldPassword");
-  });
+      test("changePassword", () => {
+        const userAccount = new UserAccount("sample@mail.com", "old");
+        userAccount.changePassword(password);
+        expect(userAccount.password).toBe(password);
+      });
+    }
+  );
 
-  test("changePassword changes the password", () => {
-    userAccount.changePassword("newPassword");
+  describe.each(["AAzerty123", "Aazerty123", "AzerAtyA123", "AzeratyA123"])(
+    "UserAccount with password '%s' should be invalid",
+    (password) => {
+      test("register", () => {
+        expect(() => {
+          new UserAccount("sample@mail.com", password);
+        }).toThrow();
+      });
 
-    expect(userAccount.password).toBe("newPassword");
-  });
+      test("changePassword", () => {
+        const userAccount = new UserAccount("sample@mail.com", "old");
+        expect(() => {
+          userAccount.changePassword(password);
+        }).toThrow();
+      });
+    }
+  );
 });
